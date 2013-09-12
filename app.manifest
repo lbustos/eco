@@ -1,20 +1,20 @@
 CACHE MANIFEST
 #Cache para la aplicaci—n que no tenga conexi—n de red
-#V1.45
+#V1.46
 #Archivos HTML
 app.manifest
-index.htm
-vitalitud.htm
-vitalitud-pregunta-1.htm
-vitalitud-pregunta-2.htm
-vitalitud-pregunta-3.htm
-vitalitud-pregunta-4.htm
-vitalitud-pregunta-5.htm
-vitalitud-pregunta-6.htm
-vitalitud-pregunta-7.htm
-vitalitud-pregunta-8.htm
-vitalitud-pregunta-9.htm
-vitalitud-resultado.htm
+index.html
+vitalitud.html
+vitalitud-pregunta-1.html
+vitalitud-pregunta-2.html
+vitalitud-pregunta-3.html
+vitalitud-pregunta-4.html
+vitalitud-pregunta-5.html
+vitalitud-pregunta-6.html
+vitalitud-pregunta-7.html
+vitalitud-pregunta-8.html
+vitalitud-pregunta-9.html
+vitalitud-resultado.html
 
 
 data/vitalitud.json
