@@ -1,0 +1,247 @@
+<!DOCTYPE HTML>
+<html manifest="app.manifest">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="apple-mobile-web-app-capable" content="yes" /> 
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<link rel="apple-touch-icon" href="images/eco/apple/icon-57.jpg" />	
+	<link rel="apple-touch-icon" sizes="114x114" href="images/eco/apple/icon-114.jpg" />
+	<link rel="apple-touch-icon" sizes="72x72" href="images/eco/apple/icon-72.jpg" />
+	<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width, target-densitydpi=medium-dpi" />
+	<link rel="icon" href="favicon.ico" type="image/x-icon">
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon"> 
+	<title>Eco ONE.</title>
+    <link rel="stylesheet" href="css/eco-c.min.css" />
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile.structure-1.2.0.min.css" />
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/ieco.css" />
+    <script src="http://code.jquery.com/jquery-1.8.0.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+	<!-- Swipejs -->
+	<script src='js/swipe.min.js'></script>
+	<link href='css/style.css' rel='stylesheet'/>
+	<script src="js/enclave.js"></script>
+	
+	<script>
+		var enclave = new Enclave()
+		var sliderAntes
+		var sliderDurante
+		var sliderDespues
+		var header
+		var footer
+		var todo
+		var altoFinal
+		var doit
+	
+		var vC = function(){
+			this.landing=0
+			this.puntos=0
+			this.cantidad=0
+			this.actual=1
+			this.preguntasLoad = 0
+			this.preguntasData = new Array()
+		}
+	
+	vC.prototype.pageinit = function(e){
+		enclave.console(e)
+		var page = e.attr('id')
+		enclave.console ('Page INIT: '+ page)
+		if( e.hasClass('preguntas')){
+			var pos = page.split("-")
+			enclave.console('Pagina de preguntas')
+			$('input[type=radio]', e).click(function(e){
+				enclave.console('Selecciono opcion: '+ $(e.target).attr('value'))
+				vitalitudController.siguiente($(e.target).attr('value')) 
+			})
+		}else{
+			if( page == 'vitalitud-resultado'){
+				var p = this.puntos
+				enclave.console ('entro a modificar resultado')
+				$('#texto-puntos').html(p + ' puntos')	
+				var rt = ''
+				var rt_img = 1
+				if( p <= 13){
+					rt = 'Tu Vitalidad no está en su punto más alto aunque bebiendo agua todos los días y empezando por pequeños cambios sentirás como conservás mejor tu energía.'
+				} else {
+					if( p <= 17){
+						rt = 'El primer paso fue dado, un pequeño impulso te ayudará a sentirte lleno de Vitalitud!'
+						rt_img = 2
+					}else{
+						if( p <= 20){
+							rt = 'Tu Vitalidad te llevará a muchos lados, aunque aún puedes ir más lejos!'
+							rt_img = 3
+						}else{
+							if( p <= 23){
+								rt = '¡Tu Vitalidad es admirable! ¿A dónde te llevará esta vez?'
+								rt_img = 4
+							}else{
+								rt = '¡Tu Vitalidad mueve montañas! ¡No hay nada que no puedas enfrentar!'
+								rt_img = 5
+							}
+						}
+					}
+				}
+				$('#texto-resultado').html(rt)
+				$('#vitalitud-resultado .imagen .medidor').css('background-image', 'url("images/eco/vitalitud/medidor-'+rt_img+'.png")')				
+			}			
+		}
+	}
+	vC.prototype.route = function(e){
+		enclave.console(e.target)
+		var page = $(e.target).attr('id')
+		enclave.console ('Page: '+ page)
+		if (page == 'vitalitud'){
+			this.landing=1
+		}else{
+			if(this.landing == 0){
+				window.location = 'vitalitud.htm'
+			}
+		}	
+	}
+	
+	vC.prototype.comenzarCuestionario = function(){
+		$.getJSON('data/vitalitud.json', function(vitalitud){
+			vitalitudController.preguntasData = vitalitud.data
+			enclave.console(vitalitudController.preguntasData)
+			vitalitudController.cantidad = vitalitudController.preguntasData.length
+			enclave.console(vitalitudController.cantidad)
+			$.mobile.changePage('vitalitud-pregunta-1.htm')
+		})
+	
+	
+	}
+	
+	vC.prototype.siguiente = function(s){
+		r = s.split('_')
+		if(r[0]==1){
+			this.puntos = 0
+			this.actual = 1
+		}
+		switch(r[1]){
+			case '1':
+				this.puntos = this.puntos + 3
+			break;
+			case '2':
+				this.puntos = this.puntos + 2
+			break;
+			case '3':
+				this.puntos = this.puntos + 1
+			break;
+		}
+		enclave.console('Puntos: '+this.puntos+' / Actual: '+this.actual+ '/ Cantidad: '+ this.cantidad)
+		if(this.actual == this.cantidad){
+			$.mobile.changePage('vitalitud-resultado.htm')
+		}else{
+			this.actual++
+			$.mobile.changePage('vitalitud-pregunta-'+this.actual+'.htm')
+		}
+	}
+	
+	
+	var vitalitudController = new vC();
+
+		$(document).live('pageshow',function(event, ui){
+			enclave.console('Viendo: '+$.mobile.activePage.attr('id'))
+			try {
+				ga('send', 'pageview', $.mobile.activePage.attr('id'));
+				enclave.console('Analytics: '+$.mobile.activePage.attr('id'));
+			  } catch(err) {
+			  }
+
+			  switch($.mobile.activePage.attr('id')){
+				case 'vitalitud':
+				case 'vitalitud-1':
+				case 'vitalitud-2':
+				case 'vitalitud-3':
+				case 'vitalitud-4':
+				case 'vitalitud-5':
+				case 'vitalitud-6':
+				case 'vitalitud-7':
+				case 'vitalitud-8':
+				case 'vitalitud-9':
+				case 'vitalitud-resultado':
+					vitalitudController.pageinit($.mobile.activePage)
+					actualizarAltoVitalitud($.mobile.activePage)
+				break;
+				default:
+					actualizarAlto();
+				break;
+			}
+		}); 
+		
+		$(window).resize(function() {
+		  clearTimeout(doit);
+		  doit = setTimeout(actualizarAlto, 500);
+		});
+		
+		function actualizarAlto(){
+			enclave.console('Actualizar alto: '+$.mobile.activePage.attr('id'))
+			switch($.mobile.activePage.attr('id')){
+				case 'vitalitud':
+				case 'vitalitud-1':
+				case 'vitalitud-2':
+				case 'vitalitud-3':
+				case 'vitalitud-4':
+				case 'vitalitud-5':
+				case 'vitalitud-6':
+				case 'vitalitud-7':
+				case 'vitalitud-8':
+				case 'vitalitud-9':
+				case 'vitalitud-resultado':
+					actualizarAltoVitalitud($.mobile.activePage);
+				break;
+			}
+		
+		}
+
+	
+		function actualizarAltoVitalitud(e){
+			var quitar =  $('.encabezado-class',e).height()  + parseInt($('.ui-content',e).css('padding-top')) + parseInt($('.ui-content',e).css('padding-bottom'));
+			var todo = $(window).height();
+                        var minAltoContenido = parseInt($('.imagen',e).css('min-height')) + ($('.ui-block-b',e).height()+10)
+                        enclave.console("Alto minimo: "+minAltoContenido)
+                        enclave.console("Todo - quitar: "+(todo - quitar))
+                        if ( minAltoContenido > (todo - quitar)){
+                           $('.ui-content',e).css({'height': minAltoContenido}); 
+                        }else{
+                           $('.ui-content',e).css({'height': todo - quitar});     
+                        }
+                        
+			var altoPosta = $('.ui-content',e).height();
+			enclave.console("Alto Posta: "+ altoPosta)
+                        enclave.console("Bloque de texto: "+($('.ui-block-b',e).height()+10))
+			if( enclave.getOrientacion() == 'portrait'){
+				// Portrait
+				$('.imagen',e).css({'height': altoPosta - ($('.ui-block-b',e).height()+10)})
+			} else {
+				// Landscape
+				$('.imagen',e).css({'height': altoPosta})
+			}
+		}
+		
+	</script>
+	</head>
+<body>
+<!-- Pagina VITALITUD -->
+<div id="vitalitud" class="vitalitud portada" data-role="page" >
+    <div id="encabezado-wrapper" class="encabezado-class">
+		<div data-role="header" data-id="persistent" id="encabezado">
+		</div>
+	</div>
+	<div data-role="content">
+			<div class="grilla ui-grid-a">
+				<div class="ui-block-a" ><div class="imagen img_demo img_vitalidad"></div></div>
+				<div class="ui-block-b" >
+					<div class="contenido-wrapper">
+					<a href="javascript:void(0)" onclick = "vitalitudController.comenzarCuestionario()" data-role="button" data-transition="slide">¡Medí tu Vitalitud!</a>
+					<!--<h2>¿Cómo esta tu vitalidad?</h2>-->
+					<p>
+					Te invitamos a contestar nuestro test con respuestas múltiples para saber cuál es tu nivel Vitalitud, porque la vitalidad es una actitud.
+					</p>
+					</div>
+				</div>
+			</div>
+	</div>
+</div>
+</body>
+</html>

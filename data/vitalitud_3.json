@@ -1,0 +1,27 @@
+{ "data" :[
+	{"pregunta": "¿Cuántas veces por semana realizas actividades deportivas?"
+	  , "opciones":[
+			{"texto": "2 o más veces por semana.", "valor": 3},
+			{"texto": "1 vez por semana.", "valor": 2},
+			{"texto": "Ninguna.", "valor": 1}
+	  ]
+	},
+
+	{"pregunta": "¿Cuándo fue la última vez que comenzaste una nueva actividad?"
+	  , "opciones":[
+		{"texto": "Me encanta emprender nuevas actividades todo el tiempo.", "valor": 3},
+		{"texto": "Con bastante esfuerzo decidí empezar una nueva actividad este año.", "valor": 2},
+		{"texto": "No comencé ninguna en el último año.", "valor": 1}
+	  ]
+	}, 
+	
+	{"pregunta": "¿Cómo está tu calzado deportivo?"
+	  , "opciones":[
+		{"texto": "¡Sucio porque siempre estoy usándolos!", "valor": 3},
+		{"texto": "Limpio porque me tomo el tiempo para limpiarlo.", "valor": 2},
+		{"texto": "Están nuevos porque no los uso/ No tengo.", "valor": 1}
+	  ]
+	}
+]}
+
+				

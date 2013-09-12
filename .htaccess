@@ -1,0 +1,9 @@
+RewriteEngine On
+#RewriteRule ^index\.htm index\.php
+#RewriteRule ^tips\.htm tips\.php
+#RewriteRule ^vitalitud-resultado\.htm vitalitud-resultado\.php
+RewriteRule ^vitalitud-pregunta-([0-9]+)\.htm vitalitud-preguntas\.php?pregunta=$1
+
+AddType text/cache-manifest .manifest
+
+DirectoryIndex index.htm index.php 
